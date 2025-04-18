@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Matriz 4x4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        input {
+            width: 50px;
+            text-align: center;
+        }
+        table {
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Preencha os valores da Matriz 4x4:</h2>
+    <table>
+        <tbody id="matriz">
+            <!-- Será preenchido com JavaScript -->
+        </tbody>
+    </table>
+
+    <button onclick="imprimirMatriz()">Imprimir Matriz</button>
+    <button onclick="mostrarResultado('quadradosPrimeiraColuna')">Soma dos quadrados da primeira coluna</button>
+    <button onclick="mostrarResultado('terceiraLinha')">Soma da terceira linha</button>
+    <button onclick="mostrarResultado('diagonalPrincipal')">Soma da diagonal principal</button>
+    <button onclick="mostrarResultado('indicesParesSegundaLinha')">Soma dos índices pares da segunda linha</button>
+
+    <h3>Resultado:</h3>
+    <pre id="resultado"></pre>
+
+    <script>
+        // Cria a tabela de inputs dinamicamente
+        const tbody = document.getElementById("matriz");
+        for (let i = 0; i < 4; i++) {
+            const row = document.createElement("tr");
+            for (let j = 0; j < 4; j++) {
+                const cell = document.createElement("td");
+                const input = document.createElement("input");
+                input.type = "number";
+                input.id = `celula-${i}-${j}`;
+                cell.appendChild(input);
+                row.appendChild(cell);
+            }
+            tbody.appendChild(row);
+        }
+
+        // Lê os valores dos inputs e cria a matriz
+        function obterMatriz() {
+            const matriz = [];
+            for (let i = 0; i < 4; i++) {
+                matriz[i] = [];
+                for (let j = 0; j < 4; j++) {
+                    const valor = parseInt(document.getElementById(`celula-${i}-${j}`).value) || 0;
+                    matriz[i][j] = valor;
+                }
+            }
+            return matriz;
+        }
+
+        function imprimirMatriz() {
+            const matriz = obterMatriz();
+            const resultado = matriz.map(linha => linha.join('\t')).join('\n');
+            document.getElementById("resultado").textContent = resultado;
+        }
+
+        function mostrarResultado(operacao) {
+            const matriz = obterMatriz();
+            let resultado = "";
+
+            switch (operacao) {
+                case 'quadradosPrimeiraColuna':
+                    resultado = matriz.reduce((soma, linha) => soma + linha[0] ** 2, 0);
+                    break;
+                case 'terceiraLinha':
+                    resultado = matriz[2].reduce((soma, val) => soma + val, 0);
+                    break;
+                case 'diagonalPrincipal':
+                    resultado = matriz.reduce((soma, linha, i) => soma + linha[i], 0);
+                    break;
+                case 'indicesParesSegundaLinha':
+                    resultado = matriz[1][0] + matriz[1][2];
+                    break;
+            }
+
+            document.getElementById("resultado").textContent = `Resultado: ${resultado}`;
+        }
+    </script>
+</body>
+</html>
